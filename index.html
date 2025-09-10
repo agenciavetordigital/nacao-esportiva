@@ -27,9 +27,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap"></noscript>
+    
+    <!-- Otimização de Performance: Pré-conexão com CDN do Tailwind -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS (com defer para não bloquear a renderização) -->
+    <script src="https://cdn.tailwindcss.com" defer></script>
 
     <!-- Custom Styles -->
     <style>
@@ -423,8 +426,4 @@
     </script>
 </body>
 </html>
-
-
-
-
 
