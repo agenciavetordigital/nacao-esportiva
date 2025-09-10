@@ -22,10 +22,11 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ccircle%20cx='50'%20cy='50'%20r='50'%20fill='%231A2E4E'/%3E%3Ctext%20x='50'%20y='55'%20font-family='Montserrat,%20sans-serif'%20font-size='50'%20font-weight='900'%20text-anchor='middle'%20fill='%23FF6B00'%3ENE%3C/text%3E%3C/svg%3E">
 
-    <!-- Google Fonts -->
+    <!-- Otimização de Fontes: Carregamento não bloqueante -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap"></noscript>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -42,8 +43,9 @@
         .font-roboto {
             font-family: 'Roboto', sans-serif;
         }
+        /* Melhoria de contraste para placeholders */
         .form-input::placeholder {
-            color: #A0AEC0;
+            color: #718096;
         }
         .form-input, .admin-input {
             color: #000000;
@@ -88,7 +90,8 @@
     <header class="bg-[#1A2E4E] shadow-lg sticky top-0 z-40">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="logo nacao esportiva.png" alt="Logo Nação Esportiva" class="h-12 w-auto mr-3">
+                <!-- Otimização da Imagem: Adicionado width e height para evitar CLS -->
+                <img src="logo nacao esportiva.jpg" alt="Logo Nação Esportiva" class="h-12 w-auto mr-3" width="48" height="48">
                 <a href="#" class="text-2xl lg:text-3xl font-montserrat font-bold text-white">Nação Esportiva</a>
             </div>
             <nav class="hidden md:flex space-x-8">
@@ -97,7 +100,8 @@
                 <a href="#sobre" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Sobre</a>
                 <a href="#contato" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Contato</a>
             </nav>
-            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+            <!-- Melhoria de Acessibilidade: Adicionado aria-label -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none" aria-label="Abrir menu de navegação">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </div>
@@ -282,16 +286,16 @@
                     return;
                 }
 
-                filteredProducts.forEach((product, originalIndex) => {
+                filteredProducts.forEach((product) => {
                     const productCard = document.createElement('div');
                     productCard.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 relative';
                     
-                    // Encontrar o índice real do produto no array não filtrado para a exclusão funcionar
                     const realIndex = products.findIndex(p => p.link === product.link && p.name === product.name);
 
                     productCard.innerHTML = `
                         <a href="${product.link}" target="_blank" rel="noopener sponsored" title="Ver ${product.name}">
-                            <img src="${product.image}" alt="Imagem de ${product.name}." class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/400x300/F5F5F5/1A2E4E?text=Imagem+Indisponível'">
+                            <!-- Otimização de Imagens: Adicionado loading="lazy" e decoding="async" -->
+                            <img src="${product.image}" alt="Imagem de ${product.name}." class="w-full h-56 object-cover" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/400x300/F5F5F5/1A2E4E?text=Imagem+Indisponível'">
                             <div class="p-6">
                                 <h3 class="font-montserrat font-bold text-xl text-[#1A2E4E]">${product.name}</h3>
                             </div>
@@ -419,5 +423,7 @@
     </script>
 </body>
 </html>
+
+
 
 
