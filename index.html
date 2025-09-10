@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Nação Esportiva - Equipamentos de Alta Performance</title>
+    <meta name="description" content="Encontre os melhores equipamentos esportivos e artigos de alta performance. As melhores ofertas da Shopee e Amazon para atletas e entusiastas do esporte.">
+    <meta name="keywords" content="esportes, equipamentos esportivos, performance, afiliado, shopee, amazon, fitness, corrida, futebol, musculação, suplementos">
+    <meta name="author" content="Nação Esportiva">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.nacaoesportiva.com">
+
+    <!-- Open Graph Meta Tags (para compartilhamento em redes sociais) -->
+    <meta property="og:title" content="Nação Esportiva - Equipamentos de Alta Performance">
+    <meta property="og:description" content="As melhores ofertas em equipamentos esportivos para elevar seu desempenho.">
+    <meta property="og:image" content="https://placehold.co/1200x630/1A2E4E/FFFFFF?text=Nação+Esportiva">
+    <meta property="og:url" content="https://www.nacaoesportiva.com">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ccircle%20cx='50'%20cy='50'%20r='50'%20fill='%231A2E4E'/%3E%3Ctext%20x='50'%20y='55'%20font-family='Montserrat,%20sans-serif'%20font-size='50'%20font-weight='900'%20text-anchor='middle'%20fill='%23FF6B00'%3ENE%3C/text%3E%3C/svg%3E">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F5F5F5;
+        }
+        .font-montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+        .form-input::placeholder {
+            color: #A0AEC0;
+        }
+        .form-input, .admin-input {
+            color: #000000;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        .product-card:hover .delete-btn {
+            opacity: 1;
+        }
+        .category-btn {
+            transition: all 0.3s ease;
+        }
+        .category-btn.active {
+            background-color: #FF6B00;
+            color: #FFFFFF;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- ========== Header ========== -->
+    <header class="bg-[#1A2E4E] shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="logo nacao esportiva.jpg" alt="Logo Nação Esportiva" class="h-12 w-auto mr-3">
+                <a href="#" class="text-2xl lg:text-3xl font-montserrat font-bold text-white">Nação Esportiva</a>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#inicio" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Início</a>
+                <a href="#produtos" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Produtos</a>
+                <a href="#sobre" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Sobre</a>
+                <a href="#contato" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Contato</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-[#1A2E4E] bg-opacity-95">
+             <a href="#inicio" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Início</a>
+            <a href="#produtos" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Produtos</a>
+            <a href="#sobre" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Sobre</a>
+            <a href="#contato" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Contato</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ========== Hero Section ========== -->
+        <section id="inicio" class="bg-[#1A2E4E] text-white">
+            <div class="container mx-auto px-6 py-20 lg:py-32 text-center">
+                <h1 class="text-4xl md:text-6xl font-black font-montserrat uppercase tracking-wider">A Força do Esporte!</h1>
+                <p class="mt-4 max-w-2xl mx-auto text-lg font-light font-roboto">Conecte-se à Nação Esportiva e encontre tudo o que você precisa para elevar sua performance. Equipamentos de alta performance e as últimas novidades do mundo esportivo em um só lugar.</p>
+                <a href="#produtos" class="mt-8 inline-block bg-[#FF6B00] hover:bg-orange-600 text-white font-montserrat font-bold py-3 px-8 rounded-lg text-lg uppercase transition-transform transform hover:scale-105 duration-300 shadow-lg">
+                    Pronto para o Desafio?
+                </a>
+            </div>
+        </section>
+
+        <!-- ========== Featured Products Section ========== -->
+        <section id="produtos" class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-center text-[#1A2E4E]">Produtos em Destaque</h2>
+                <p class="text-center mt-2 mb-8 text-gray-600 font-roboto">Selecionamos as melhores ofertas para você.</p>
+                
+                <!-- Category Filters -->
+                <div id="category-filters" class="flex flex-wrap justify-center gap-3 mb-12">
+                    <button class="category-btn active bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Todos">Todos</button>
+                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Mais Vendidos">Mais Vendidos</button>
+                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Futebol">Futebol</button>
+                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Basquete">Basquete</button>
+                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Corrida">Corrida</button>
+                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Academia">Academia</button>
+                </div>
+
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== About Section ========== -->
+        <section id="sobre" class="bg-white py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-[#1A2E4E]">Nossa Missão</h2>
+                    <div class="w-24 h-1 bg-[#FF6B00] mx-auto mt-4 mb-6"></div>
+                    <p class="text-gray-700 font-roboto text-lg leading-relaxed">
+                        A <span class="font-semibold">Nação Esportiva</span> nasceu da paixão pelo movimento e pela superação. Nossa missão é ser a sua principal fonte de informação e ofertas, conectando você aos melhores produtos esportivos disponíveis no mercado. Através de parcerias com gigantes como Amazon e Shopee, selecionamos e recomendamos apenas itens que realmente fazem a diferença na sua jornada, seja você um atleta profissional ou um entusiasta do bem-estar.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Contact Section ========== -->
+        <section id="contato" class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-center text-[#1A2E4E]">Fale Conosco</h2>
+                    <p class="text-center mt-2 mb-8 text-gray-600 font-roboto">Tem alguma dúvida ou sugestão? Envie sua mensagem!</p>
+                    <form action="https://formspree.io/f/mrbajanv" method="POST" class="bg-white p-8 rounded-lg shadow-lg">
+                        <div class="mb-5"><label for="name" class="block text-gray-700 font-bold mb-2 font-roboto">Nome</label><input type="text" id="name" name="name" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="Seu nome completo" required></div>
+                        <div class="mb-5"><label for="email" class="block text-gray-700 font-bold mb-2 font-roboto">E-mail</label><input type="email" id="email" name="email" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="seuemail@dominio.com" required></div>
+                        <div class="mb-5"><label for="whatsapp" class="block text-gray-700 font-bold mb-2 font-roboto">WhatsApp</label><input type="tel" id="whatsapp" name="whatsapp" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="(XX) XXXXX-XXXX" required></div>
+                        <div class="mb-5"><label for="message" class="block text-gray-700 font-bold mb-2 font-roboto">Mensagem</label><textarea id="message" name="message" rows="4" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="Escreva sua mensagem aqui..." required></textarea></div>
+                        <div class="text-center"><button type="submit" class="bg-[#5CB85C] hover:bg-green-600 text-white font-montserrat font-bold py-3 px-10 rounded-lg text-lg uppercase transition-transform transform hover:scale-105 duration-300 shadow-lg">Enviar Mensagem</button></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Admin Panel Section (Functionality only) ========== -->
+        <section id="admin-section" class="hidden py-12 bg-gray-200">
+            <div id="admin-panel" class="hidden container mx-auto px-6 max-w-2xl">
+                 <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold font-montserrat text-center text-[#1A2E4E] mb-6">Painel de Controle</h3>
+                    <div class="space-y-4">
+                        <div><label for="product-name" class="block font-bold mb-1">Nome do Produto</label><input type="text" id="product-name" class="admin-input w-full p-2 border rounded" placeholder="Ex: Tênis de Corrida XPTO"></div>
+                        <div><label for="product-link" class="block font-bold mb-1">Link de Afiliado</label><input type="url" id="product-link" class="admin-input w-full p-2 border rounded" placeholder="https://..."></div>
+                        <div><label for="product-image" class="block font-bold mb-1">URL da Imagem do Produto</label><input type="url" id="product-image" class="admin-input w-full p-2 border rounded" placeholder="https://..."></div>
+                        <div>
+                            <label for="product-category" class="block font-bold mb-1">Categoria</label>
+                            <select id="product-category" class="admin-input w-full p-2 border rounded bg-white">
+                                <option value="Mais Vendidos">Mais Vendidos</option>
+                                <option value="Futebol">Futebol</option>
+                                <option value="Basquete">Basquete</option>
+                                <option value="Corrida">Corrida</option>
+                                <option value="Academia">Academia</option>
+                            </select>
+                        </div>
+                        <button id="add-product-btn" class="w-full bg-[#FF6B00] hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-lg uppercase transition-colors">Adicionar Produto</button>
+                    </div>
+                 </div>
+                 <button id="close-admin-panel-btn" class="mt-4 bg-[#1A2E4E] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-900 transition-colors">Fechar Painel</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========== Footer ========== -->
+    <footer class="bg-[#1A2E4E] text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="font-roboto">&copy; <span id="secret-trigger" class="cursor-pointer" title="Acesso Admin">2024</span> Nação Esportiva. Todos os direitos reservados.</p>
+            <p class="font-roboto text-sm mt-2">Site desenvolvido como um portal de afiliados. Os produtos são de responsabilidade das respectivas plataformas.</p>
+        </div>
+    </footer>
+
+    <!-- ========== Password Modal ========== -->
+    <div id="password-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm mx-4">
+            <h3 class="text-2xl font-bold font-montserrat text-center text-[#1A2E4E] mb-4">Acesso Restrito</h3>
+            <p class="text-center text-gray-600 mb-6">Por favor, insira a senha para gerenciar os produtos.</p>
+            <div class="space-y-4">
+                <div>
+                    <label for="admin-password" class="sr-only">Senha</label>
+                    <input type="password" id="admin-password" class="admin-input w-full p-3 border rounded text-center" placeholder="******">
+                </div>
+                <p id="password-error" class="text-red-500 text-sm text-center h-4"></p>
+                <button id="login-btn" class="w-full bg-[#1A2E4E] hover:bg-blue-900 text-white font-bold py-3 rounded-lg text-lg uppercase transition-colors">Entrar</button>
+                <button id="close-modal-btn" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 rounded-lg transition-colors mt-2">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========== JavaScript ========== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos do DOM
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const productGrid = document.getElementById('product-grid');
+            const adminSection = document.getElementById('admin-section');
+            const adminPanel = document.getElementById('admin-panel');
+            const closeAdminPanelBtn = document.getElementById('close-admin-panel-btn');
+            const addProductBtn = document.getElementById('add-product-btn');
+            const passwordModal = document.getElementById('password-modal');
+            const adminPasswordInput = document.getElementById('admin-password');
+            const loginBtn = document.getElementById('login-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const passwordError = document.getElementById('password-error');
+            const secretTrigger = document.getElementById('secret-trigger');
+            const categoryFilters = document.getElementById('category-filters');
+
+            // --- SENHA DE ACESSO --- Altere esta senha para o que desejar
+            const ADMIN_PASSWORD = '@Helena1208';
+            
+            let adminMode = false;
+
+            const initialProducts = [
+                { name: 'Tênis de Corrida Pro', link: 'https://shopee.com.br/seu-link-afiliado', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Tênis+de+Corrida', category: 'Corrida' },
+                { name: 'Smartwatch Fitness GPS', link: 'https://www.amazon.com.br/seu-link-afiliado', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Smartwatch+Fitness', category: 'Corrida' },
+                { name: 'Kit Halteres Ajustáveis', link: 'https://shopee.com.br/seu-link-afiliado-2', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Kit+Halteres', category: 'Academia' },
+                { name: 'Whey Protein Concentrado', link: 'https://www.amazon.com.br/seu-link-afiliado-2', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Whey+Protein', category: 'Academia' },
+                { name: 'Chuteira Society Speed', link: 'https://shopee.com.br/seu-link-afiliado-3', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Chuteira+Futebol', category: 'Futebol' },
+                { name: 'Camisa Oficial de Time', link: 'https://www.amazon.com.br/seu-link-afiliado-3', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Camisa+de+Time', category: 'Futebol' },
+                { name: 'Bola de Basquete Pro', link: 'https://www.amazon.com.br/seu-link-afiliado-4', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Bola+Basquete', category: 'Basquete' },
+                { name: 'Tênis de Corrida Max', link: 'https://shopee.com.br/seu-link-afiliado-4', image: 'https://placehold.co/400x300/F5F5F5/1A2E4E?text=Tênis+Max', category: 'Mais Vendidos' },
+            ];
+
+            const getProducts = () => {
+                const products = localStorage.getItem('nacaoEsportivaProducts');
+                if (!products || JSON.parse(products).length === 0) {
+                    return initialProducts;
+                }
+                return JSON.parse(products);
+            };
+
+            const saveProducts = (products) => {
+                localStorage.setItem('nacaoEsportivaProducts', JSON.stringify(products));
+            };
+
+            const renderProducts = (filter = 'Todos') => {
+                productGrid.innerHTML = '';
+                const products = getProducts();
+                const filteredProducts = products.filter(p => filter === 'Todos' || p.category === filter);
+
+                if (filteredProducts.length === 0) {
+                    productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado nesta categoria.</p>`;
+                    return;
+                }
+
+                filteredProducts.forEach((product, originalIndex) => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 relative';
+                    
+                    // Encontrar o índice real do produto no array não filtrado para a exclusão funcionar
+                    const realIndex = products.findIndex(p => p.link === product.link && p.name === product.name);
+
+                    productCard.innerHTML = `
+                        <a href="${product.link}" target="_blank" rel="noopener sponsored" title="Ver ${product.name}">
+                            <img src="${product.image}" alt="Imagem de ${product.name}." class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/400x300/F5F5F5/1A2E4E?text=Imagem+Indisponível'">
+                            <div class="p-6">
+                                <h3 class="font-montserrat font-bold text-xl text-[#1A2E4E]">${product.name}</h3>
+                            </div>
+                        </a>
+                        ${adminMode ? `<div class="delete-btn" data-index="${realIndex}">X</div>` : ''}
+                    `;
+                    productGrid.appendChild(productCard);
+                });
+            };
+
+            const addProduct = () => {
+                const nameInput = document.getElementById('product-name');
+                const linkInput = document.getElementById('product-link');
+                const imageInput = document.getElementById('product-image');
+                const categoryInput = document.getElementById('product-category');
+                
+                const name = nameInput.value.trim();
+                const link = linkInput.value.trim();
+                const image = imageInput.value.trim();
+                const category = categoryInput.value;
+
+                if (!name || !link || !image) { return; }
+
+                const newProduct = { name, link, image, category };
+                const products = getProducts();
+                products.push(newProduct);
+                saveProducts(products);
+                renderProducts();
+                nameInput.value = ''; linkInput.value = ''; imageInput.value = '';
+            };
+
+            const deleteProduct = (index) => {
+                const products = getProducts();
+                products.splice(index, 1);
+                saveProducts(products);
+                const currentFilter = document.querySelector('.category-btn.active').dataset.category;
+                renderProducts(currentFilter);
+            };
+            
+            const showPasswordModal = () => {
+                passwordModal.classList.remove('hidden');
+                adminPasswordInput.focus();
+                passwordError.textContent = '';
+            };
+
+            const hidePasswordModal = () => {
+                passwordModal.classList.add('hidden');
+                adminPasswordInput.value = '';
+                passwordError.textContent = '';
+            };
+            
+            const openAdminPanel = () => {
+                adminMode = true;
+                adminSection.classList.remove('hidden');
+                adminPanel.classList.remove('hidden');
+                const currentFilter = document.querySelector('.category-btn.active').dataset.category;
+                renderProducts(currentFilter);
+            };
+
+            const closeAdminPanel = () => {
+                adminMode = false;
+                adminPanel.classList.add('hidden');
+                adminSection.classList.add('hidden');
+                const currentFilter = document.querySelector('.category-btn.active').dataset.category;
+                renderProducts(currentFilter);
+            };
+
+            const checkPassword = () => {
+                if (adminPasswordInput.value === ADMIN_PASSWORD) {
+                    hidePasswordModal();
+                    openAdminPanel();
+                } else {
+                    passwordError.textContent = 'Senha incorreta. Tente novamente.';
+                    adminPasswordInput.value = '';
+                    adminPasswordInput.focus();
+                }
+            };
+
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            const mobileMenuLinks = mobileMenu.getElementsByTagName('a');
+            for (let link of mobileMenuLinks) {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            }
+
+            secretTrigger.addEventListener('click', () => {
+                if (!adminMode) {
+                    showPasswordModal();
+                }
+            });
+
+            closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
+            
+            loginBtn.addEventListener('click', checkPassword);
+            closeModalBtn.addEventListener('click', hidePasswordModal);
+            adminPasswordInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
+            passwordModal.addEventListener('click', (e) => {
+                if (e.target === passwordModal) hidePasswordModal();
+            });
+            
+            addProductBtn.addEventListener('click', addProduct);
+            
+            productGrid.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('delete-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    // Use um modal customizado no futuro, pois confirm() pode ser bloqueado
+                    if (confirm('Tem certeza que deseja excluir este produto?')) {
+                        deleteProduct(parseInt(index, 10));
+                    }
+                }
+            });
+
+            categoryFilters.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelector('.category-btn.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    const category = e.target.dataset.category;
+                    renderProducts(category);
+                }
+            });
+
+            renderProducts();
+        });
+    </script>
+</body>
+</html>
+
