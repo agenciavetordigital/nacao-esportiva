@@ -30,10 +30,7 @@
     
     <!-- Otimização de Performance: Pré-conexão com CDN do Tailwind -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
-
-    <!-- Tailwind CSS (com defer para não bloquear a renderização) -->
-    <script src="https://cdn.tailwindcss.com" defer></script>
-
+    
     <!-- Custom Styles -->
     <style>
         body {
@@ -424,6 +421,9 @@
             renderProducts();
         });
     </script>
+
+    <!-- Tailwind CSS (movido para o final para otimização de desktop) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>
 
