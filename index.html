@@ -279,36 +279,33 @@
             let adminMode = false;
             let allProducts = [];
 
-            // Função para migrar produtos do localStorage para o Firestore (executa apenas uma vez)
-            const migrateToFirestore = async () => {
-                const migrationDone = localStorage.getItem('firestoreMigrationDone');
-                if (migrationDone) return;
+            // Lista de produtos inicial (fallback) - SEUS PRODUTOS ESTÃO AQUI
+            const initialProducts = [{"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},{"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},{"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},{"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},{"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]}];
 
-                const localProductsRaw = localStorage.getItem('nacaoEsportivaProducts');
-                if (localProductsRaw) {
-                    const localProducts = JSON.parse(localProductsRaw);
-                    if (Array.isArray(localProducts) && localProducts.length > 0) {
-                        try {
-                            const firestoreSnapshot = await getDocs(productsCollection);
-                            if (firestoreSnapshot.empty) {
-                                console.log("Migrando produtos do armazenamento local para o Firestore...");
-                                const batch = writeBatch(db);
-                                localProducts.forEach(product => {
-                                    const docRef = doc(productsCollection);
-                                    batch.set(docRef, product);
-                                });
-                                await batch.commit();
-                                console.log("Migração concluída!");
-                            }
-                        } catch (e) {
-                            console.error("Erro na migração:", e);
-                        }
+            // Função para popular o Firestore com os produtos iniciais (executa apenas uma vez)
+            const populateInitialProducts = async () => {
+                const populationDone = localStorage.getItem('firestorePopulationDone');
+                if (populationDone) return;
+
+                try {
+                    const firestoreSnapshot = await getDocs(productsCollection);
+                    if (firestoreSnapshot.empty) {
+                        console.log("Populando o Firestore com os produtos iniciais...");
+                        const batch = writeBatch(db);
+                        initialProducts.forEach(product => {
+                            const docRef = doc(productsCollection);
+                            batch.set(docRef, product);
+                        });
+                        await batch.commit();
+                        console.log("População inicial concluída!");
                     }
+                } catch (e) {
+                    console.error("Erro na população inicial:", e);
                 }
-                localStorage.setItem('firestoreMigrationDone', 'true');
+                localStorage.setItem('firestorePopulationDone', 'true');
             };
 
-            await migrateToFirestore();
+            await populateInitialProducts();
             
             const renderProducts = (filter) => {
                 const currentFilter = filter || document.querySelector('.category-btn.active')?.dataset.category || 'Mais Vendidos';
@@ -317,7 +314,7 @@
                 const filteredProducts = allProducts.filter(p => Array.isArray(p.category) && p.category.includes(currentFilter));
 
                 if (filteredProducts.length === 0) {
-                     productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado nesta categoria.</p>`;
+                     productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">A carregar produtos ou nenhum produto encontrado...</p>`;
                 } else {
                      filteredProducts.forEach(createProductCard);
                 }
