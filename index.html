@@ -251,6 +251,7 @@
                 }
             } catch (error) {
                 console.error("Authentication failed:", error);
+                // Mesmo se a autenticação falhar, o site deve continuar a renderizar os produtos publicamente
             }
 
             // Caminho da coleção no Firestore
@@ -287,17 +288,21 @@
                 const localProductsRaw = localStorage.getItem('nacaoEsportivaProducts');
                 if (localProductsRaw) {
                     const localProducts = JSON.parse(localProductsRaw);
-                    if (localProducts.length > 0) {
-                        const firestoreSnapshot = await getDocs(productsCollection);
-                        if (firestoreSnapshot.empty) {
-                            console.log("Migrando produtos do armazenamento local para o Firestore...");
-                            const batch = writeBatch(db);
-                            localProducts.forEach(product => {
-                                const docRef = doc(productsCollection);
-                                batch.set(docRef, product);
-                            });
-                            await batch.commit();
-                            console.log("Migração concluída!");
+                    if (Array.isArray(localProducts) && localProducts.length > 0) {
+                        try {
+                            const firestoreSnapshot = await getDocs(productsCollection);
+                            if (firestoreSnapshot.empty) {
+                                console.log("Migrando produtos do armazenamento local para o Firestore...");
+                                const batch = writeBatch(db);
+                                localProducts.forEach(product => {
+                                    const docRef = doc(productsCollection);
+                                    batch.set(docRef, product);
+                                });
+                                await batch.commit();
+                                console.log("Migração concluída!");
+                            }
+                        } catch (e) {
+                            console.error("Erro na migração:", e);
                         }
                     }
                 }
@@ -307,7 +312,7 @@
             await migrateToFirestore();
             
             const renderProducts = (filter) => {
-                const currentFilter = filter || document.querySelector('.category-btn.active').dataset.category || 'Mais Vendidos';
+                const currentFilter = filter || document.querySelector('.category-btn.active')?.dataset.category || 'Mais Vendidos';
                 productGrid.innerHTML = '';
                 
                 const filteredProducts = allProducts.filter(p => Array.isArray(p.category) && p.category.includes(currentFilter));
@@ -370,7 +375,12 @@
             };
             
             // --- Funções do Painel de Admin ---
-            const showPasswordModal = () => passwordModal.classList.remove('hidden');
+            const showPasswordModal = () => { 
+                passwordError.textContent = '';
+                adminPasswordInput.value = '';
+                passwordModal.classList.remove('hidden');
+                adminPasswordInput.focus();
+            };
             const hidePasswordModal = () => passwordModal.classList.add('hidden');
             const openAdminPanel = () => {
                 adminMode = true;
@@ -390,13 +400,19 @@
                     openAdminPanel();
                 } else {
                     passwordError.textContent = 'Senha incorreta.';
+                    adminPasswordInput.value = '';
+                    adminPasswordInput.focus();
                 }
             };
             
             // --- Event Listeners ---
             onSnapshot(productsCollection, (snapshot) => {
                 allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderProducts();
+                const currentFilter = document.querySelector('.category-btn.active')?.dataset.category;
+                renderProducts(currentFilter);
+            }, (error) => {
+                console.error("Erro ao receber atualizações em tempo real:", error);
+                productGrid.innerHTML = `<p class="col-span-full text-center text-red-500">Não foi possível carregar os produtos. Verifique a sua conexão.</p>`;
             });
 
             mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
@@ -406,6 +422,9 @@
             
             loginBtn.addEventListener('click', checkPassword);
             closeModalBtn.addEventListener('click', hidePasswordModal);
+            passwordModal.addEventListener('click', (e) => {
+                if (e.target === passwordModal) hidePasswordModal();
+            });
             adminPasswordInput.addEventListener('keyup', e => e.key === 'Enter' && checkPassword());
             
             addProductBtn.addEventListener('click', addProduct);
@@ -421,7 +440,7 @@
 
             categoryFilters.addEventListener('click', (e) => {
                 if (e.target.tagName === 'BUTTON') {
-                    document.querySelector('.category-btn.active').classList.remove('active');
+                    document.querySelector('.category-btn.active')?.classList.remove('active');
                     e.target.classList.add('active');
                     renderProducts(e.target.dataset.category);
                 }
