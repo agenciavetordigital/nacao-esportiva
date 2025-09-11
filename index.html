@@ -231,10 +231,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        // Adiciona um wrapper try-catch global para a lógica principal
-        try {
-            document.addEventListener('DOMContentLoaded', async () => {
+        
+        async function main() {
+            try {
                 // Configuração do Firebase (NÃO ALTERAR)
                 const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'nacao-esportiva-default';
@@ -445,10 +444,16 @@
                         renderProducts(e.target.dataset.category);
                     }
                 });
-            });
-        } catch (e) {
-            console.error("Erro fatal ao carregar o script do site:", e);
-            // Poderia mostrar uma mensagem de erro para o utilizador aqui se fosse necessário
+            } catch (e) {
+                console.error("Erro fatal ao carregar o script do site:", e);
+                document.getElementById('product-grid').innerHTML = `<p class="col-span-full text-center text-red-500">Ocorreu um erro crítico ao carregar o site. Por favor, tente recarregar a página.</p>`;
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', main);
+        } else {
+            main();
         }
     </script>
 </body>
