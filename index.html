@@ -232,7 +232,7 @@
         import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        async function main() {
+        document.addEventListener('DOMContentLoaded', async () => {
             try {
                 // Configuração do Firebase (NÃO ALTERAR)
                 const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
@@ -448,13 +448,7 @@
                 console.error("Erro fatal ao carregar o script do site:", e);
                 document.getElementById('product-grid').innerHTML = `<p class="col-span-full text-center text-red-500">Ocorreu um erro crítico ao carregar o site. Por favor, tente recarregar a página.</p>`;
             }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', main);
-        } else {
-            main();
-        }
+        });
     </script>
 </body>
 </html>
