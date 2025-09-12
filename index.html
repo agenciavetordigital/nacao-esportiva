@@ -1,425 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Meta Tags -->
-    <title>Nação Esportiva - Equipamentos de Alta Performance</title>
-    <meta name="description" content="Encontre os melhores equipamentos esportivos e artigos de alta performance. As melhores ofertas da Shopee e Amazon para atletas e entusiastas do esporte.">
-    <meta name="keywords" content="esportes, equipamentos esportivos, performance, afiliado, shopee, amazon, fitness, corrida, futebol, musculação, suplementos">
-    <meta name="author" content="Nação Esportiva">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://www.nacaoesportiva.com">
-
-    <!-- Open Graph Meta Tags (para compartilhamento em redes sociais) -->
-    <meta property="og:title" content="Nação Esportiva - Equipamentos de Alta Performance">
-    <meta property="og:description" content="As melhores ofertas em equipamentos esportivos para elevar seu desempenho.">
-    <meta property="og:image" content="https://placehold.co/1200x630/1A2E4E/FFFFFF?text=Nação+Esportiva">
-    <meta property="og:url" content="https://www.nacaoesportiva.com">
-    <meta property="og:type" content="website">
-
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ccircle%20cx='50'%20cy='50'%20r='50'%20fill='%231A2E4E'/%3E%3Ctext%20x='50'%20y='55'%20font-family='Montserrat,%20sans-serif'%20font-size='50'%20font-weight='900'%20text-anchor='middle'%20fill='%23FF6B00'%3ENE%3C/text%3E%3C/svg%3E">
-
-    <!-- Otimização de Fontes: Carregamento não bloqueante -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Roboto:wght@300;400;500&display=swap"></noscript>
-    
-    <!-- Otimização de Performance: Pré-conexão com CDN do Tailwind -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom Styles -->
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #F5F5F5;
-        }
-        .font-montserrat {
-            font-family: 'Montserrat', sans-serif;
-        }
-        .font-roboto {
-            font-family: 'Roboto', sans-serif;
-        }
-        .form-input::placeholder {
-            color: #718096;
-        }
-        .form-input, .admin-input {
-            color: #000000;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        .delete-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(255, 0, 0, 0.7);
-            color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
-        .product-card:hover .delete-btn {
-            opacity: 1;
-        }
-        .category-btn {
-            transition: all 0.3s ease;
-        }
-        .category-btn.active {
-            background-color: #FF6B00;
-            color: #FFFFFF;
-            transform: scale(1.05);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nação Esportiva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .category-btn.active {
+      background-color: #1A2E4E;
+      color: white;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="text-gray-800">
+<body class="bg-gray-100 font-sans">
 
-    <!-- ========== Header ========== -->
-    <header class="bg-[#1A2E4E] shadow-lg sticky top-0 z-40">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="logo nacao esportiva.png" alt="Logo Nação Esportiva" class="h-12 w-auto mr-3" width="48" height="48">
-                <a href="#" class="text-2xl lg:text-3xl font-montserrat font-bold text-white">Nação Esportiva</a>
-            </div>
-            <nav class="hidden md:flex space-x-8">
-                <a href="#inicio" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Início</a>
-                <a href="#produtos" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Produtos</a>
-                <a href="#sobre" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Sobre</a>
-                <a href="#contato" class="text-white hover:text-[#FF6B00] transition-colors duration-300 font-semibold">Contato</a>
-            </nav>
-            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none" aria-label="Abrir menu de navegação">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-[#1A2E4E] bg-opacity-95">
-             <a href="#inicio" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Início</a>
-            <a href="#produtos" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Produtos</a>
-            <a href="#sobre" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Sobre</a>
-            <a href="#contato" class="block text-white text-center py-2 px-4 hover:bg-[#FF6B00]">Contato</a>
-        </div>
-    </header>
+  <!-- Filtros de categoria -->
+  <div id="category-filters" class="flex justify-center gap-4 p-4">
+    <button class="category-btn active" data-category="Mais Vendidos">Mais Vendidos</button>
+    <button class="category-btn" data-category="Academia">Academia</button>
+  </div>
 
-    <main>
-        <!-- ========== Hero Section ========== -->
-        <section id="inicio" class="bg-[#1A2E4E] text-white">
-            <div class="container mx-auto px-6 py-20 lg:py-32 text-center">
-                <h1 class="text-4xl md:text-6xl font-black font-montserrat uppercase tracking-wider">A Força do Esporte!</h1>
-                <p class="mt-4 max-w-2xl mx-auto text-lg font-light font-roboto">Conecte-se à Nação Esportiva e encontre tudo o que você precisa para elevar sua performance. Equipamentos de alta performance e as últimas novidades do mundo esportivo em um só lugar.</p>
-                <a href="#produtos" class="mt-8 inline-block bg-[#FF6B00] hover:bg-orange-600 text-white font-montserrat font-bold py-3 px-8 rounded-lg text-lg uppercase transition-transform transform hover:scale-105 duration-300 shadow-lg">
-                    Pronto para o Desafio?
-                </a>
-            </div>
-        </section>
+  <!-- Grade de produtos -->
+  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6"></div>
 
-        <!-- ========== Featured Products Section ========== -->
-        <section id="produtos" class="py-16 lg:py-24">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-center text-[#1A2E4E]">Produtos em Destaque</h2>
-                <p id="products-subtitle" class="text-center mt-2 mb-8 text-gray-600 font-roboto">Selecionamos as melhores ofertas para você.</p>
-                
-                <div id="category-filters" class="flex flex-wrap justify-center gap-3 mb-12">
-                    <button class="category-btn active bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Mais Vendidos">Mais Vendidos</button>
-                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Futebol">Futebol</button>
-                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Basquete">Basquete</button>
-                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Corrida">Corrida</button>
-                    <button class="category-btn bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Academia">Academia</button>
-                </div>
-
-                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                     <!-- Os produtos serão carregados aqui -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== About Section ========== -->
-        <section id="sobre" class="bg-white py-16 lg:py-24">
-            <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-[#1A2E4E]">Nossa Missão</h2>
-                    <div class="w-24 h-1 bg-[#FF6B00] mx-auto mt-4 mb-6"></div>
-                    <p class="text-gray-700 font-roboto text-lg leading-relaxed">
-                        A <span class="font-semibold">Nação Esportiva</span> nasceu da paixão pelo movimento e pela superação. Nossa missão é ser a sua principal fonte de informação e ofertas, conectando você aos melhores produtos esportivos disponíveis no mercado. Através de parcerias com gigantes como Amazon e Shopee, selecionamos e recomendamos apenas itens que realmente fazem a diferença na sua jornada, seja você um atleta profissional ou um entusiasta do bem-estar.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== Contact Section ========== -->
-        <section id="contato" class="py-16 lg:py-24">
-            <div class="container mx-auto px-6">
-                <div class="max-w-2xl mx-auto">
-                    <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-center text-[#1A2E4E]">Fale Conosco</h2>
-                    <p class="text-center mt-2 mb-8 text-gray-600 font-roboto">Tem alguma dúvida ou sugestão? Envie sua mensagem!</p>
-                    <form action="https://formspree.io/f/mrbajanv" method="POST" class="bg-white p-8 rounded-lg shadow-lg">
-                        <div class="mb-5"><label for="name" class="block text-gray-700 font-bold mb-2 font-roboto">Nome</label><input type="text" id="name" name="name" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="Seu nome completo" required></div>
-                        <div class="mb-5"><label for="email" class="block text-gray-700 font-bold mb-2 font-roboto">E-mail</label><input type="email" id="email" name="email" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="seuemail@dominio.com" required></div>
-                        <div class="mb-5"><label for="whatsapp" class="block text-gray-700 font-bold mb-2 font-roboto">WhatsApp</label><input type="tel" id="whatsapp" name="whatsapp" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="(XX) XXXXX-XXXX" required></div>
-                        <div class="mb-5"><label for="message" class="block text-gray-700 font-bold mb-2 font-roboto">Mensagem</label><textarea id="message" name="message" rows="4" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B00]" placeholder="Escreva sua mensagem aqui..." required></textarea></div>
-                        <div class="text-center"><button type="submit" class="bg-[#5CB85C] hover:bg-green-600 text-white font-montserrat font-bold py-3 px-10 rounded-lg text-lg uppercase transition-transform transform hover:scale-105 duration-300 shadow-lg">Enviar Mensagem</button></div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== Admin Panel Section ========== -->
-        <section id="admin-section" class="hidden py-12 bg-gray-200">
-            <div id="admin-panel" class="hidden container mx-auto px-6 max-w-2xl">
-                 <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold font-montserrat text-center text-[#1A2E4E] mb-6">Painel de Controle</h3>
-                    <div class="space-y-4">
-                        <div><label for="product-name" class="block font-bold mb-1">Nome do Produto</label><input type="text" id="product-name" class="admin-input w-full p-2 border rounded" placeholder="Ex: Tênis de Corrida XPTO"></div>
-                        <div><label for="product-link" class="block font-bold mb-1">Link de Afiliado</label><input type="url" id="product-link" class="admin-input w-full p-2 border rounded" placeholder="https://..."></div>
-                        <div><label for="product-image" class="block font-bold mb-1">URL da Imagem do Produto</label><input type="url" id="product-image" class="admin-input w-full p-2 border rounded" placeholder="https://..."></div>
-                        <div>
-                            <label class="block font-bold mb-2">Categorias</label>
-                            <div id="product-category-checkboxes" class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
-                                <div><input type="checkbox" id="cat-mais-vendidos" value="Mais Vendidos" class="form-checkbox h-5 w-5"><label for="cat-mais-vendidos" class="ml-2">Mais Vendidos</label></div>
-                                <div><input type="checkbox" id="cat-futebol" value="Futebol" class="form-checkbox h-5 w-5"><label for="cat-futebol" class="ml-2">Futebol</label></div>
-                                <div><input type="checkbox" id="cat-basquete" value="Basquete" class="form-checkbox h-5 w-5"><label for="cat-basquete" class="ml-2">Basquete</label></div>
-                                <div><input type="checkbox" id="cat-corrida" value="Corrida" class="form-checkbox h-5 w-5"><label for="cat-corrida" class="ml-2">Corrida</label></div>
-                                <div><input type="checkbox" id="cat-academia" value="Academia" class="form-checkbox h-5 w-5"><label for="cat-academia" class="ml-2">Academia</label></div>
-                            </div>
-                        </div>
-                        <button id="add-product-btn" class="w-full bg-[#FF6B00] hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-lg uppercase">Adicionar Produto</button>
-                    </div>
-                 </div>
-                 <button id="close-admin-panel-btn" class="mt-4 bg-[#1A2E4E] text-white font-semibold py-2 px-6 rounded-lg">Fechar Painel</button>
-            </div>
-        </section>
-    </main>
-
-    <!-- ========== Footer ========== -->
-    <footer class="bg-[#1A2E4E] text-white py-8">
-        <div class="container mx-auto px-6 text-center">
-            <p class="font-roboto">&copy; <span id="secret-trigger" class="cursor-pointer" title="Acesso Admin">2024</span> Nação Esportiva. Todos os direitos reservados.</p>
-            <p class="font-roboto text-sm mt-2">Site desenvolvido como um portal de afiliados. Os produtos são de responsabilidade das respectivas plataformas.</p>
-        </div>
-    </footer>
-
-    <!-- ========== Password Modal ========== -->
-    <div id="password-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm mx-4">
-            <h3 class="text-2xl font-bold font-montserrat text-center text-[#1A2E4E] mb-4">Acesso Restrito</h3>
-            <p class="text-center text-gray-600 mb-6">Insira a senha para gerenciar os produtos.</p>
-            <div class="space-y-4">
-                <div><label for="admin-password" class="sr-only">Senha</label><input type="password" id="admin-password" class="admin-input w-full p-3 border rounded text-center" placeholder="******"></div>
-                <p id="password-error" class="text-red-500 text-sm text-center h-4"></p>
-                <button id="login-btn" class="w-full bg-[#1A2E4E] hover:bg-blue-900 text-white font-bold py-3 rounded-lg text-lg">Entrar</button>
-                <button id="close-modal-btn" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 rounded-lg mt-2">Cancelar</button>
-            </div>
-        </div>
+  <!-- Painel admin -->
+  <div id="admin-panel" class="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto mt-6 hidden">
+    <h2 class="text-xl font-bold mb-4">Adicionar Produto</h2>
+    <input id="product-name" class="w-full p-2 border mb-2" placeholder="Nome do produto">
+    <input id="product-link" class="w-full p-2 border mb-2" placeholder="Link do produto">
+    <input id="product-image" class="w-full p-2 border mb-2" placeholder="URL da imagem">
+    <div id="product-category-checkboxes" class="flex gap-4 mb-2">
+      <label><input type="checkbox" value="Mais Vendidos"> Mais Vendidos</label>
+      <label><input type="checkbox" value="Academia"> Academia</label>
     </div>
+    <button id="add-product-btn" class="bg-green-600 text-white px-4 py-2 rounded">Adicionar</button>
+  </div>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    <!-- ========== JavaScript & Firebase ========== -->
-    <script type="module">
-        // Importar funções do Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. Elementos do DOM ---
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const productGrid = document.getElementById('product-grid');
-            const adminSection = document.getElementById('admin-section');
-            const adminPanel = document.getElementById('admin-panel');
-            const closeAdminPanelBtn = document.getElementById('close-admin-panel-btn');
-            const addProductBtn = document.getElementById('add-product-btn');
-            const passwordModal = document.getElementById('password-modal');
-            const adminPasswordInput = document.getElementById('admin-password');
-            const loginBtn = document.getElementById('login-btn');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const passwordError = document.getElementById('password-error');
-            const secretTrigger = document.getElementById('secret-trigger');
-            const categoryFilters = document.getElementById('category-filters');
-            const productsSubtitle = document.getElementById('products-subtitle');
+    document.addEventListener('DOMContentLoaded', () => {
+      // Config do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyDuhM2qqaj68Ve8G_eMcEU-9dmZLFBzh4U",
+        authDomain: "nacao-esportiva-7f224.firebaseapp.com",
+        projectId: "nacao-esportiva-7f224",
+        storageBucket: "nacao-esportiva-7f224.firebasestorage.app",
+        messagingSenderId: "55149738514",
+        appId: "1:55149738514:web:d8abff9e41309242dd36cb",
+        measurementId: "G-18PEDQ3W5H"
+      };
 
-            // --- 2. Configuração e Estado ---
-            const ADMIN_PASSWORD = 'nacaoesportiva2025';
-            let adminMode = false;
-            let allProducts = [];
-            const initialProducts = [{"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},{"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},{"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},{"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},{"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]}];
+      const ADMIN_PASSWORD = "nacaoesportiva2025";
+      let adminMode = false;
+      let allProducts = [];
 
-            let db = null;
-            let productsCollection = null;
-            let productsCollectionPath = '';
+      const initialProducts = [
+        {"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},
+        {"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},
+        {"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},
+        {"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},
+        {"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]}
+      ];
 
-            // --- 3. Funções de Renderização e UI ---
-            const renderProducts = (filter) => {
-                const currentFilter = filter || document.querySelector('.category-btn.active')?.dataset.category || 'Mais Vendidos';
-                productGrid.innerHTML = '';
-                const filteredProducts = allProducts.filter(p => Array.isArray(p.category) && p.category.includes(currentFilter));
+      // Inicializar Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+      signInAnonymously(auth).catch(console.error);
 
-                if (allProducts.length === 0) {
-                    productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">A carregar produtos...</p>`;
-                } else if (filteredProducts.length === 0) {
-                    productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado nesta categoria.</p>`;
-                } else {
-                    filteredProducts.forEach(createProductCard);
-                }
-            };
-            
-            const createProductCard = (product) => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 relative';
-                productCard.innerHTML = `
-                    <a href="${product.link}" target="_blank" rel="noopener sponsored" title="Ver ${product.name}">
-                        <img src="${product.image}" alt="Imagem de ${product.name}." class="w-full h-56 object-cover" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/400x300/F5F5F5/1A2E4E?text=Imagem+Indisponível'">
-                        <div class="p-6">
-                            <h3 class="font-montserrat font-bold text-xl text-[#1A2E4E]">${product.name}</h3>
-                        </div>
-                    </a>
-                    ${adminMode ? `<div class="delete-btn" data-id="${product.id}">X</div>` : ''}
-                `;
-                productGrid.appendChild(productCard);
-            };
+      const productsCollection = collection(db, "products");
 
-            const showPasswordModal = () => {
-                if (!db) {
-                    alert('O painel de admin está temporariamente indisponível. Verifique a sua conexão e recarregue a página.');
-                    return;
-                }
-                passwordError.textContent = ''; 
-                adminPasswordInput.value = ''; 
-                passwordModal.classList.remove('hidden'); 
-                adminPasswordInput.focus();
-            };
-            const hidePasswordModal = () => passwordModal.classList.add('hidden');
-            const openAdminPanel = () => { adminMode = true; adminSection.classList.remove('hidden'); adminPanel.classList.remove('hidden'); renderProducts(); };
-            const closeAdminPanel = () => { adminMode = false; adminPanel.classList.add('hidden'); adminSection.classList.add('hidden'); renderProducts(); };
-            const checkPassword = () => {
-                if (adminPasswordInput.value === ADMIN_PASSWORD) {
-                    hidePasswordModal();
-                    openAdminPanel();
-                } else {
-                    passwordError.textContent = 'Senha incorreta.'; adminPasswordInput.value = ''; adminPasswordInput.focus();
-                }
-            };
+      // Renderizar produtos
+      const renderProducts = (filter) => {
+        const productGrid = document.getElementById('product-grid');
+        const currentFilter = filter || document.querySelector('.category-btn.active')?.dataset.category || 'Mais Vendidos';
+        productGrid.innerHTML = '';
+        const filtered = allProducts.filter(p => p.category.includes(currentFilter));
 
-            // --- 4. Funções de Interação com Dados ---
-            const addProduct = async () => {
-                if (!db) { return alert('Erro de conexão. Tente recarregar a página.'); }
-                const name = document.getElementById('product-name').value.trim();
-                const link = document.getElementById('product-link').value.trim();
-                const image = document.getElementById('product-image').value.trim();
-                const categories = Array.from(document.querySelectorAll('#product-category-checkboxes input:checked')).map(cb => cb.value);
-                if (!name || !link || !image || categories.length === 0) return alert('Preencha todos os campos e selecione pelo menos uma categoria.');
-                
-                try {
-                    await addDoc(productsCollection, { name, link, image, category: categories });
-                    document.getElementById('product-name').value = '';
-                    document.getElementById('product-link').value = '';
-                    document.getElementById('product-image').value = '';
-                    document.querySelectorAll('#product-category-checkboxes input:checked').forEach(cb => cb.checked = false);
-                } catch (e) {
-                    console.error("Erro ao adicionar documento: ", e);
-                    alert("Ocorreu um erro ao adicionar o produto.");
-                }
-            };
+        if (filtered.length === 0) {
+          productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto nesta categoria.</p>`;
+        } else {
+          filtered.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden relative';
+            card.innerHTML = `
+              <a href="${p.link}" target="_blank" rel="noopener sponsored">
+                <img src="${p.image}" alt="${p.name}" class="w-full h-56 object-cover">
+                <div class="p-6">
+                  <h3 class="font-bold text-xl text-[#1A2E4E]">${p.name}</h3>
+                </div>
+              </a>
+              ${adminMode ? `<div class="delete-btn" data-id="${p.id}">X</div>` : ''}
+            `;
+            productGrid.appendChild(card);
+          });
+        }
+      };
 
-            const deleteProduct = async (id) => {
-                if (!db) { return alert('Erro de conexão. Tente recarregar a página.'); }
-                try {
-                    await deleteDoc(doc(db, productsCollectionPath, id));
-                } catch (e) {
-                    console.error("Erro ao remover documento: ", e);
-                    alert("Ocorreu um erro ao remover o produto.");
-                }
-            };
+      // Adicionar produto
+      const addProduct = async () => {
+        const name = document.getElementById('product-name').value.trim();
+        const link = document.getElementById('product-link').value.trim();
+        const image = document.getElementById('product-image').value.trim();
+        const categories = Array.from(document.querySelectorAll('#product-category-checkboxes input:checked')).map(cb => cb.value);
 
-            // --- 5. Lógica de Inicialização ---
-            const initializeApp = async () => {
-                // Ativar listeners de UI que não dependem do Firebase
-                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-                secretTrigger.addEventListener('click', showPasswordModal);
-                closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
-                loginBtn.addEventListener('click', checkPassword);
-                adminPasswordInput.addEventListener('keyup', e => e.key === 'Enter' && checkPassword());
-                passwordModal.addEventListener('click', (e) => { if (e.target === passwordModal) hidePasswordModal(); });
-                addProductBtn.addEventListener('click', addProduct);
-                categoryFilters.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'BUTTON') {
-                        document.querySelector('.category-btn.active')?.classList.remove('active');
-                        e.target.classList.add('active');
-                        renderProducts(e.target.dataset.category);
-                    }
-                });
-                productGrid.addEventListener('click', (e) => {
-                    const deleteButton = e.target.closest('.delete-btn');
-                    if (deleteButton) {
-                        const id = deleteButton.dataset.id;
-                        if (confirm('Tem certeza que deseja excluir este produto?')) {
-                            deleteProduct(id);
-                        }
-                    }
-                });
+        if (!name || !link || !image || categories.length === 0) return alert('Preencha todos os campos.');
+        await addDoc(productsCollection, { name, link, image, category: categories });
+      };
 
-                // Tentar inicializar o Firebase
-                try {
-                    if (typeof __firebase_config === 'undefined' || !__firebase_config || __firebase_config === '{}') {
-                        throw new Error("Configuração do Firebase não encontrada.");
-                    }
-                    const firebaseConfig = JSON.parse(__firebase_config);
-                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'nacao-esportiva-default';
-                    
-                    const app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    const auth = getAuth(app);
-                    
-                    await (typeof __initial_auth_token !== 'undefined' && __initial_auth_token ? signInWithCustomToken(auth, __initial_auth_token) : signInAnonymously(auth));
-                    
-                    productsCollectionPath = `/artifacts/${appId}/public/data/products`;
-                    productsCollection = collection(db, productsCollectionPath);
+      // Deletar produto
+      const deleteProduct = async (id) => {
+        await deleteDoc(doc(db, "products", id));
+      };
 
-                    const populateInitialProducts = async () => {
-                        const populationDone = localStorage.getItem('firestorePopulationDone');
-                        if (populationDone) return;
-                        const snapshot = await getDocs(productsCollection);
-                        if (snapshot.empty) {
-                            console.log("Populando o Firestore com produtos iniciais...");
-                            const batch = writeBatch(db);
-                            initialProducts.forEach(p => batch.set(doc(productsCollection), p));
-                            await batch.commit();
-                        }
-                        localStorage.setItem('firestorePopulationDone', 'true');
-                    };
-                    await populateInitialProducts();
+      // População inicial se o banco estiver vazio
+      (async () => {
+        const snapshot = await getDocs(productsCollection);
+        if (snapshot.empty) {
+          const batch = writeBatch(db);
+          initialProducts.forEach(p => batch.set(doc(productsCollection), p));
+          await batch.commit();
+        }
+      })();
 
-                    onSnapshot(productsCollection, (snapshot) => {
-                        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        renderProducts();
-                    }, (error) => {
-                        console.error("Erro no listener do Firestore:", error);
-                        throw new Error("Falha no listener do Firestore.");
-                    });
-                } catch (error) {
-                    console.error("ERRO: A inicialização do Firebase falhou. A usar produtos locais.", error);
-                    productsSubtitle.innerHTML += '<br><span class="text-orange-600 text-sm">Modo offline. Os produtos podem não estar atualizados.</span>';
-                    allProducts = initialProducts;
-                    renderProducts();
-                }
-            };
+      // Listener em tempo real
+      onSnapshot(productsCollection, (snapshot) => {
+        allProducts = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        renderProducts();
+      });
 
-            // --- 6. Iniciar a Aplicação ---
-            initializeApp();
-        });
-    </script>
+      // Eventos
+      document.getElementById('add-product-btn').addEventListener('click', addProduct);
+      document.getElementById('product-grid').addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+          deleteProduct(e.target.dataset.id);
+        }
+      });
+      document.getElementById('category-filters').addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+          document.querySelector('.category-btn.active')?.classList.remove('active');
+          e.target.classList.add('active');
+          renderProducts(e.target.dataset.category);
+        }
+      });
+
+      // Ativar painel admin
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'a') {
+          const senha = prompt("Digite a senha de administrador:");
+          if (senha === ADMIN_PASSWORD) {
+            adminMode = true;
+            document.getElementById('admin-panel').classList.remove('hidden');
+            renderProducts();
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-
