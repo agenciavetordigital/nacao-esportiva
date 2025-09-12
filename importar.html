@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Importar Produtos para Firestore</title>
+</head>
+<body>
+  <h1>Importando produtos...</h1>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuhM2qqaj68Ve8G_eMcEU-9dmZLFBzh4U",
+      authDomain: "nacao-esportiva-7f224.firebaseapp.com",
+      projectId: "nacao-esportiva-7f224",
+      storageBucket: "nacao-esportiva-7f224.firebasestorage.app",
+      messagingSenderId: "55149738514",
+      appId: "1:55149738514:web:d8abff9e41309242dd36cb",
+      measurementId: "G-18PEDQ3W5H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const initialProducts = [
+      {"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":"Academia"},
+      {"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":"Mais Vendidos"},
+      {"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":"Academia"},
+      {"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":"Mais Vendidos"},
+      {"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":"Mais Vendidos"},
+      {"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":"Academia"},
+      {"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":"Academia"},
+      {"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":"Mais Vendidos"}
+    ];
+
+    async function importarProdutos() {
+      for (const p of initialProducts) {
+        await addDoc(collection(db, "produtos"), p);
+        console.log("Adicionado:", p.name);
+      }
+      document.body.innerHTML = "<h2>✅ Importação concluída! Agora você já pode apagar este arquivo.</h2>";
+    }
+
+    importarProdutos();
+  </script>
+</body>
+</html>
