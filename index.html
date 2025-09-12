@@ -129,7 +129,7 @@
         <section id="produtos" class="py-16 lg:py-24">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold font-montserrat text-center text-[#1A2E4E]">Produtos em Destaque</h2>
-                <p id="products-subtitle" class="text-center mt-2 mb-8 text-gray-600 font-roboto">Selecionamos as melhores ofertas para você.</p>
+                <p class="text-center mt-2 mb-8 text-gray-600 font-roboto">Selecionamos as melhores ofertas para você.</p>
                 
                 <div id="category-filters" class="flex flex-wrap justify-center gap-3 mb-12">
                     <button class="category-btn active bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-full" data-category="Mais Vendidos">Mais Vendidos</button>
@@ -140,7 +140,7 @@
                 </div>
 
                 <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                     <!-- Os produtos serão carregados aqui -->
+                     <!-- Os produtos serão carregados aqui pelo Firebase -->
                 </div>
             </div>
         </section>
@@ -229,10 +229,11 @@
     <script type="module">
         // Importar funções do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch, enableNetwork } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        document.addEventListener('DOMContentLoaded', () => {
+        // Função principal que encapsula toda a lógica do site
+        const mainApp = async () => {
             // --- 1. Elementos do DOM ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -248,7 +249,6 @@
             const passwordError = document.getElementById('password-error');
             const secretTrigger = document.getElementById('secret-trigger');
             const categoryFilters = document.getElementById('category-filters');
-            const productsSubtitle = document.getElementById('products-subtitle');
 
             // --- 2. Configuração e Estado ---
             const ADMIN_PASSWORD = 'nacaoesportiva2025';
@@ -256,16 +256,11 @@
             let allProducts = [];
             const initialProducts = [{"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},{"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},{"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},{"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},{"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]}];
 
-            let db = null;
-            let productsCollection = null;
-            let productsCollectionPath = '';
-
-            // --- 3. Funções de Renderização e UI ---
+            // --- 3. Funções ---
             const renderProducts = (filter) => {
                 const currentFilter = filter || document.querySelector('.category-btn.active')?.dataset.category || 'Mais Vendidos';
                 productGrid.innerHTML = '';
                 const filteredProducts = allProducts.filter(p => Array.isArray(p.category) && p.category.includes(currentFilter));
-
                 if (allProducts.length === 0) {
                     productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">A carregar produtos...</p>`;
                 } else if (filteredProducts.length === 0) {
@@ -290,16 +285,7 @@
                 productGrid.appendChild(productCard);
             };
 
-            const showPasswordModal = () => {
-                if (!db) {
-                    alert('O painel de admin está temporariamente indisponível. Verifique a sua conexão e recarregue a página.');
-                    return;
-                }
-                passwordError.textContent = ''; 
-                adminPasswordInput.value = ''; 
-                passwordModal.classList.remove('hidden'); 
-                adminPasswordInput.focus();
-            };
+            const showPasswordModal = () => { passwordError.textContent = ''; adminPasswordInput.value = ''; passwordModal.classList.remove('hidden'); adminPasswordInput.focus(); };
             const hidePasswordModal = () => passwordModal.classList.add('hidden');
             const openAdminPanel = () => { adminMode = true; adminSection.classList.remove('hidden'); adminPanel.classList.remove('hidden'); renderProducts(); };
             const closeAdminPanel = () => { adminMode = false; adminPanel.classList.add('hidden'); adminSection.classList.add('hidden'); renderProducts(); };
@@ -312,118 +298,95 @@
                 }
             };
 
-            // --- 4. Funções de Interação com Dados ---
-            const addProduct = async () => {
-                if (!db) { return alert('Erro de conexão. Tente recarregar a página.'); }
-                const name = document.getElementById('product-name').value.trim();
-                const link = document.getElementById('product-link').value.trim();
-                const image = document.getElementById('product-image').value.trim();
-                const categories = Array.from(document.querySelectorAll('#product-category-checkboxes input:checked')).map(cb => cb.value);
-                if (!name || !link || !image || categories.length === 0) return alert('Preencha todos os campos e selecione pelo menos uma categoria.');
+            // --- 4. Event Listeners Gerais (não dependem do Firebase) ---
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            categoryFilters.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelector('.category-btn.active')?.classList.remove('active');
+                    e.target.classList.add('active');
+                    renderProducts(e.target.dataset.category);
+                }
+            });
+
+            // --- 5. Lógica do Firebase ---
+            try {
+                if (typeof __firebase_config === 'undefined' || !__firebase_config || __firebase_config === '{}') {
+                    throw new Error("Configuração do Firebase não encontrada.");
+                }
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'nacao-esportiva-default';
                 
-                try {
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+                const auth = getAuth(app);
+                
+                await (typeof __initial_auth_token !== 'undefined' && __initial_auth_token ? signInWithCustomToken(auth, __initial_auth_token) : signInAnonymously(auth));
+                
+                const productsCollectionPath = `/artifacts/${appId}/public/data/products`;
+                const productsCollection = collection(db, productsCollectionPath);
+
+                const populateInitialProducts = async () => {
+                    const populationDone = localStorage.getItem('firestorePopulationDone');
+                    if (populationDone) return;
+                    const snapshot = await getDocs(productsCollection);
+                    if (snapshot.empty) {
+                        console.log("Populando o Firestore com produtos iniciais...");
+                        const batch = writeBatch(db);
+                        initialProducts.forEach(p => batch.set(doc(productsCollection), p));
+                        await batch.commit();
+                    }
+                    localStorage.setItem('firestorePopulationDone', 'true');
+                };
+                await populateInitialProducts();
+
+                onSnapshot(productsCollection, (snapshot) => {
+                    allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderProducts();
+                }, (error) => {
+                    console.error("Erro no listener do Firestore:", error);
+                    allProducts = initialProducts; renderProducts();
+                });
+
+                const addProduct = async () => {
+                    const name = document.getElementById('product-name').value.trim();
+                    const link = document.getElementById('product-link').value.trim();
+                    const image = document.getElementById('product-image').value.trim();
+                    const categories = Array.from(document.querySelectorAll('#product-category-checkboxes input:checked')).map(cb => cb.value);
+                    if (!name || !link || !image || categories.length === 0) return alert('Preencha todos os campos.');
                     await addDoc(productsCollection, { name, link, image, category: categories });
                     document.getElementById('product-name').value = '';
                     document.getElementById('product-link').value = '';
                     document.getElementById('product-image').value = '';
                     document.querySelectorAll('#product-category-checkboxes input:checked').forEach(cb => cb.checked = false);
-                } catch (e) {
-                    console.error("Erro ao adicionar documento: ", e);
-                    alert("Ocorreu um erro ao adicionar o produto.");
-                }
-            };
+                };
 
-            const deleteProduct = async (id) => {
-                if (!db) { return alert('Erro de conexão. Tente recarregar a página.'); }
-                try {
-                    await deleteDoc(doc(db, productsCollectionPath, id));
-                } catch (e) {
-                    console.error("Erro ao remover documento: ", e);
-                    alert("Ocorreu um erro ao remover o produto.");
-                }
-            };
+                const deleteProduct = async (id) => deleteDoc(doc(db, productsCollectionPath, id));
 
-            // --- 5. Lógica de Inicialização ---
-            const initializeApp = async () => {
-                // Ativar listeners de UI que não dependem do Firebase
-                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+                // Ligar event listeners de admin
                 secretTrigger.addEventListener('click', showPasswordModal);
                 closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
                 loginBtn.addEventListener('click', checkPassword);
                 adminPasswordInput.addEventListener('keyup', e => e.key === 'Enter' && checkPassword());
-                passwordModal.addEventListener('click', (e) => { if (e.target === passwordModal) hidePasswordModal(); });
                 addProductBtn.addEventListener('click', addProduct);
-                categoryFilters.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'BUTTON') {
-                        document.querySelector('.category-btn.active')?.classList.remove('active');
-                        e.target.classList.add('active');
-                        renderProducts(e.target.dataset.category);
-                    }
-                });
                 productGrid.addEventListener('click', (e) => {
                     const deleteButton = e.target.closest('.delete-btn');
                     if (deleteButton) {
                         const id = deleteButton.dataset.id;
-                        if (confirm('Tem certeza que deseja excluir este produto?')) {
-                            deleteProduct(id);
-                        }
+                        if (confirm('Tem certeza que deseja excluir este produto?')) deleteProduct(id);
                     }
                 });
 
-                // Tentar inicializar o Firebase
-                try {
-                    const firebaseConfig = {
-                        apiKey: "AIzaSyDuhM2qqaj68Ve8G_eMcEU-9dmZLFBzh4U",
-                        authDomain: "nacao-esportiva-7f224.firebaseapp.com",
-                        projectId: "nacao-esportiva-7f224",
-                        storageBucket: "nacao-esportiva-7f224.appspot.com",
-                        messagingSenderId: "55149738514",
-                        appId: "1:55149738514:web:d8abff9e41309242dd36cb",
-                        measurementId: "G-18PEDQ3W5H"
-                    };
-                    const appId = 'nacao-esportiva-7f224'; // Usando o projectId como fallback
-                    
-                    const app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    const auth = getAuth(app);
-                    
-                    await signInAnonymously(auth);
-                    
-                    productsCollectionPath = `/artifacts/${appId}/public/data/products`;
-                    productsCollection = collection(db, productsCollectionPath);
+            } catch (error) {
+                console.error("ERRO: A inicialização do Firebase falhou. A usar produtos locais.", error);
+                productGrid.innerHTML = `<p class="col-span-full text-center text-orange-600">Modo offline. Os produtos podem não estar atualizados.</p>`;
+                allProducts = initialProducts;
+                renderProducts();
+                secretTrigger.addEventListener('click', () => alert('O painel de admin está desativado no modo offline.'));
+            }
+        };
 
-                    const populateInitialProducts = async () => {
-                        const populationDone = localStorage.getItem('firestorePopulationDone');
-                        if (populationDone) return;
-                        const snapshot = await getDocs(productsCollection);
-                        if (snapshot.empty) {
-                            console.log("Populando o Firestore com produtos iniciais...");
-                            const batch = writeBatch(db);
-                            initialProducts.forEach(p => batch.set(doc(productsCollection), p));
-                            await batch.commit();
-                        }
-                        localStorage.setItem('firestorePopulationDone', 'true');
-                    };
-                    await populateInitialProducts();
-
-                    onSnapshot(productsCollection, (snapshot) => {
-                        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        renderProducts();
-                    }, (error) => {
-                        console.error("Erro no listener do Firestore:", error);
-                        throw new Error("Falha no listener do Firestore.");
-                    });
-                } catch (error) {
-                    console.error("ERRO: A inicialização do Firebase falhou. A usar produtos locais.", error);
-                    productsSubtitle.innerHTML += '<br><span class="text-orange-600 text-sm">Modo offline. Os produtos podem não estar atualizados.</span>';
-                    allProducts = initialProducts;
-                    renderProducts();
-                }
-            };
-
-            // --- 6. Iniciar a Aplicação ---
-            initializeApp();
-        });
+        // Iniciar a aplicação
+        document.addEventListener('DOMContentLoaded', mainApp);
     </script>
 </body>
 </html>
