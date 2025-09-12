@@ -291,9 +291,8 @@
             };
 
             const showPasswordModal = () => {
-                // Não mostra o painel se estiver em modo offline (db não inicializado)
                 if (!db) {
-                    alert('O painel de admin está desativado no modo offline.');
+                    alert('O painel de admin está temporariamente indisponível. Verifique a sua conexão e recarregue a página.');
                     return;
                 }
                 passwordError.textContent = ''; 
@@ -345,7 +344,33 @@
             };
 
             // --- 5. Lógica de Inicialização ---
-            const initializeFirebase = async () => {
+            const initializeApp = async () => {
+                // Ativar listeners de UI que não dependem do Firebase
+                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+                secretTrigger.addEventListener('click', showPasswordModal);
+                closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
+                loginBtn.addEventListener('click', checkPassword);
+                adminPasswordInput.addEventListener('keyup', e => e.key === 'Enter' && checkPassword());
+                passwordModal.addEventListener('click', (e) => { if (e.target === passwordModal) hidePasswordModal(); });
+                addProductBtn.addEventListener('click', addProduct);
+                categoryFilters.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        document.querySelector('.category-btn.active')?.classList.remove('active');
+                        e.target.classList.add('active');
+                        renderProducts(e.target.dataset.category);
+                    }
+                });
+                productGrid.addEventListener('click', (e) => {
+                    const deleteButton = e.target.closest('.delete-btn');
+                    if (deleteButton) {
+                        const id = deleteButton.dataset.id;
+                        if (confirm('Tem certeza que deseja excluir este produto?')) {
+                            deleteProduct(id);
+                        }
+                    }
+                });
+
+                // Tentar inicializar o Firebase
                 try {
                     if (typeof __firebase_config === 'undefined' || !__firebase_config || __firebase_config === '{}') {
                         throw new Error("Configuração do Firebase não encontrada.");
@@ -391,35 +416,8 @@
                 }
             };
 
-            // --- 6. Ativar Event Listeners ---
-            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-            closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
-            loginBtn.addEventListener('click', checkPassword);
-            closeModalBtn.addEventListener('click', hidePasswordModal);
-            addProductBtn.addEventListener('click', addProduct);
-            secretTrigger.addEventListener('click', showPasswordModal);
-            adminPasswordInput.addEventListener('keyup', e => e.key === 'Enter' && checkPassword());
-            passwordModal.addEventListener('click', (e) => { if (e.target === passwordModal) hidePasswordModal(); });
-
-            categoryFilters.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    document.querySelector('.category-btn.active')?.classList.remove('active');
-                    e.target.classList.add('active');
-                    renderProducts(e.target.dataset.category);
-                }
-            });
-            productGrid.addEventListener('click', (e) => {
-                const deleteButton = e.target.closest('.delete-btn');
-                if (deleteButton) {
-                    const id = deleteButton.dataset.id;
-                    if (confirm('Tem certeza que deseja excluir este produto?')) {
-                        deleteProduct(id);
-                    }
-                }
-            });
-
-            // --- 7. Iniciar a Aplicação ---
-            initializeFirebase();
+            // --- 6. Iniciar a Aplicação ---
+            initializeApp();
         });
     </script>
 </body>
