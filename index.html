@@ -266,12 +266,11 @@
             
             let adminMode = false;
 
-            const initialProducts = [{"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},{"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},{"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},{"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},{"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]}];
+            const initialProducts = [{"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},{"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},{"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},{"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},{"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]},{"name":"Bomba Penalty SAC Azul - Amazon","link":"https://amzn.to/46fFtyz","image":"https://m.media-amazon.com/images/I/41Chro8cyIL._AC_SL1000_.jpg","category":["Mais Vendidos","Futebol"]}];
 
             const getProducts = () => {
                 const products = localStorage.getItem('nacaoEsportivaProducts');
                 if (!products) {
-                    // Se não houver nada no localStorage, salva os produtos iniciais
                     localStorage.setItem('nacaoEsportivaProducts', JSON.stringify(initialProducts));
                     return initialProducts;
                 }
@@ -292,7 +291,7 @@
                 if (filteredProducts.length === 0) {
                      productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado nesta categoria.</p>`;
                 } else {
-                     filteredProducts.forEach((product, index) => {
+                     filteredProducts.forEach((product) => {
                          const originalIndex = products.findIndex(p => p.link === product.link && p.name === product.name);
                          createProductCard(product, originalIndex);
                      });
@@ -305,7 +304,6 @@
                 
                 productCard.innerHTML = `
                     <a href="${product.link}" target="_blank" rel="noopener sponsored" title="Ver ${product.name}">
-                        <!-- Otimização de Imagens: Adicionado loading="lazy" e decoding="async" -->
                         <img src="${product.image}" alt="Imagem de ${product.name}." class="w-full h-56 object-cover" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/400x300/F5F5F5/1A2E4E?text=Imagem+Indisponível'">
                         <div class="p-6">
                             <h3 class="font-montserrat font-bold text-xl text-[#1A2E4E]">${product.name}</h3>
@@ -315,7 +313,6 @@
                 `;
                 productGrid.appendChild(productCard);
             }
-
 
             const addProduct = () => {
                 const nameInput = document.getElementById('product-name');
@@ -451,5 +448,4 @@
     </script>
 </body>
 </html>
-
 
