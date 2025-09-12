@@ -240,16 +240,12 @@
             </div>
         </div>
     </div>
-    
-    <!-- ========== JavaScript & Firebase ========== -->
-    <script type="module">
-        // Importar funções do Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        
+
+
+    <!-- ========== JavaScript ========== -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. Elementos do DOM ---
+            // Elementos do DOM
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const productGrid = document.getElementById('product-grid');
@@ -264,185 +260,196 @@
             const passwordError = document.getElementById('password-error');
             const secretTrigger = document.getElementById('secret-trigger');
             const categoryFilters = document.getElementById('category-filters');
-            const productsSubtitle = document.getElementById('products-subtitle');
 
-            // --- 2. Configuração e Estado ---
+            // --- SENHA DE ACESSO --- Altere esta senha para o que desejar
             const ADMIN_PASSWORD = 'nacaoesportiva2025';
+            
             let adminMode = false;
-            let allProducts = [];
+
             const initialProducts = [{"name":"Elástico Extensor de Exercícios - FORIOUS","link":"https://s.shopee.com.br/3fuDBzjYkT","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lq0tijs0y9ev1a.webp","category":["Academia"]},{"name":"Conjunto feminino Blusão + bermuda - Nandamatos","link":"https://s.shopee.com.br/20lzD0jYOF","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lxfi56smq5z311.webp","category":["Mais Vendidos","Academia"]},{"name":"Óculos De Natação Infantil - Choice Oficial","link":"https://s.shopee.com.br/1LWIPvZelv","image":"https://down-br.img.susercontent.com/file/sg-11134201-824h7-mei1y3w70kqqb8.webp","category":["Mais Vendidos"]},{"name":"kit 3 Faixas Elástica de Resistência - Tudodo","link":"https://s.shopee.com.br/8fIt9SWrDB","image":"https://down-br.img.susercontent.com/file/sg-11134201-7rdyu-mc67bqz0h71o16.webp","category":["Mais Vendidos","Academia"]},{"name":"Colchonete p/ Academia Premium - La Casa Home","link":"https://s.shopee.com.br/2LOpbuWXrZ","image":"https://down-br.img.susercontent.com/file/br-11134207-7r98o-lzjhnmdxayw586.webp","category":["Academia","Mais Vendidos"]}];
 
-            let db = null;
-            let productsCollection = null;
-            let productsCollectionPath = '';
+            const getProducts = () => {
+                const products = localStorage.getItem('nacaoEsportivaProducts');
+                if (!products) {
+                    // Se não houver nada no localStorage, salva os produtos iniciais
+                    localStorage.setItem('nacaoEsportivaProducts', JSON.stringify(initialProducts));
+                    return initialProducts;
+                }
+                return JSON.parse(products);
+            };
 
-            // --- 3. Funções de Renderização e UI ---
+            const saveProducts = (products) => {
+                localStorage.setItem('nacaoEsportivaProducts', JSON.stringify(products));
+            };
+
             const renderProducts = (filter) => {
-                const currentFilter = filter || document.querySelector('.category-btn.active')?.dataset.category || 'Mais Vendidos';
+                const currentFilter = filter || document.querySelector('.category-btn.active').dataset.category || 'Mais Vendidos';
                 productGrid.innerHTML = '';
-                const filteredProducts = allProducts.filter(p => Array.isArray(p.category) && p.category.includes(currentFilter));
+                const products = getProducts();
+                
+                const filteredProducts = products.filter(p => p.category.includes(currentFilter));
 
-                if (allProducts.length === 0) {
-                    productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">A carregar produtos...</p>`;
-                } else if (filteredProducts.length === 0) {
-                    productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado nesta categoria.</p>`;
+                if (filteredProducts.length === 0) {
+                     productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado nesta categoria.</p>`;
                 } else {
-                    filteredProducts.forEach(createProductCard);
+                     filteredProducts.forEach((product, index) => {
+                         const originalIndex = products.findIndex(p => p.link === product.link && p.name === product.name);
+                         createProductCard(product, originalIndex);
+                     });
                 }
             };
             
-            const createProductCard = (product) => {
+            const createProductCard = (product, index) => {
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 relative';
+                
                 productCard.innerHTML = `
                     <a href="${product.link}" target="_blank" rel="noopener sponsored" title="Ver ${product.name}">
+                        <!-- Otimização de Imagens: Adicionado loading="lazy" e decoding="async" -->
                         <img src="${product.image}" alt="Imagem de ${product.name}." class="w-full h-56 object-cover" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/400x300/F5F5F5/1A2E4E?text=Imagem+Indisponível'">
                         <div class="p-6">
                             <h3 class="font-montserrat font-bold text-xl text-[#1A2E4E]">${product.name}</h3>
                         </div>
                     </a>
-                    ${adminMode ? `<div class="delete-btn" data-id="${product.id}">X</div>` : ''}
+                    ${adminMode ? `<div class="delete-btn" data-index="${index}">X</div>` : ''}
                 `;
                 productGrid.appendChild(productCard);
-            };
+            }
 
-            const showPasswordModal = () => {
-                if (!db) {
-                    alert('O painel de admin está temporariamente indisponível. Verifique a sua conexão e recarregue a página.');
+
+            const addProduct = () => {
+                const nameInput = document.getElementById('product-name');
+                const linkInput = document.getElementById('product-link');
+                const imageInput = document.getElementById('product-image');
+                const categoryCheckboxes = document.querySelectorAll('#product-category-checkboxes input:checked');
+                
+                const name = nameInput.value.trim();
+                const link = linkInput.value.trim();
+                const image = imageInput.value.trim();
+                const categories = Array.from(categoryCheckboxes).map(cb => cb.value);
+
+                if (!name || !link || !image || categories.length === 0) {
+                    alert('Por favor, preencha todos os campos e selecione pelo menos uma categoria.');
                     return;
                 }
-                passwordError.textContent = ''; 
-                adminPasswordInput.value = ''; 
-                passwordModal.classList.remove('hidden'); 
-                adminPasswordInput.focus();
+
+                const newProduct = { name, link, image, category: categories };
+                const products = getProducts();
+                products.push(newProduct);
+                saveProducts(products);
+
+                const firstCategory = categories[0];
+                renderProducts(firstCategory);
+
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if(btn.dataset.category === firstCategory) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                nameInput.value = '';
+                linkInput.value = '';
+                imageInput.value = '';
+                categoryCheckboxes.forEach(cb => cb.checked = false);
             };
-            const hidePasswordModal = () => passwordModal.classList.add('hidden');
-            const openAdminPanel = () => { adminMode = true; adminSection.classList.remove('hidden'); adminPanel.classList.remove('hidden'); renderProducts(); };
-            const closeAdminPanel = () => { adminMode = false; adminPanel.classList.add('hidden'); adminSection.classList.add('hidden'); renderProducts(); };
+
+            const deleteProduct = (index) => {
+                const products = getProducts();
+                products.splice(index, 1);
+                saveProducts(products);
+                const currentFilter = document.querySelector('.category-btn.active').dataset.category;
+                renderProducts(currentFilter);
+            };
+            
+            const showPasswordModal = () => {
+                passwordModal.classList.remove('hidden');
+                adminPasswordInput.focus();
+                passwordError.textContent = '';
+            };
+
+            const hidePasswordModal = () => {
+                passwordModal.classList.add('hidden');
+                adminPasswordInput.value = '';
+                passwordError.textContent = '';
+            };
+            
+            const openAdminPanel = () => {
+                adminMode = true;
+                adminSection.classList.remove('hidden');
+                adminPanel.classList.remove('hidden');
+                const currentFilter = document.querySelector('.category-btn.active').dataset.category;
+                renderProducts(currentFilter);
+            };
+
+            const closeAdminPanel = () => {
+                adminMode = false;
+                adminPanel.classList.add('hidden');
+                adminSection.classList.add('hidden');
+                const currentFilter = document.querySelector('.category-btn.active').dataset.category;
+                renderProducts(currentFilter);
+            };
+
             const checkPassword = () => {
                 if (adminPasswordInput.value === ADMIN_PASSWORD) {
                     hidePasswordModal();
                     openAdminPanel();
                 } else {
-                    passwordError.textContent = 'Senha incorreta.'; adminPasswordInput.value = ''; adminPasswordInput.focus();
+                    passwordError.textContent = 'Senha incorreta. Tente novamente.';
+                    adminPasswordInput.value = '';
+                    adminPasswordInput.focus();
                 }
             };
 
-            // --- 4. Funções de Interação com Dados ---
-            const addProduct = async () => {
-                if (!db) { return alert('Erro de conexão. Tente recarregar a página.'); }
-                const name = document.getElementById('product-name').value.trim();
-                const link = document.getElementById('product-link').value.trim();
-                const image = document.getElementById('product-image').value.trim();
-                const categories = Array.from(document.querySelectorAll('#product-category-checkboxes input:checked')).map(cb => cb.value);
-                if (!name || !link || !image || categories.length === 0) return alert('Preencha todos os campos e selecione pelo menos uma categoria.');
-                
-                try {
-                    await addDoc(productsCollection, { name, link, image, category: categories });
-                    document.getElementById('product-name').value = '';
-                    document.getElementById('product-link').value = '';
-                    document.getElementById('product-image').value = '';
-                    document.querySelectorAll('#product-category-checkboxes input:checked').forEach(cb => cb.checked = false);
-                } catch (e) {
-                    console.error("Erro ao adicionar documento: ", e);
-                    alert("Ocorreu um erro ao adicionar o produto.");
-                }
-            };
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            const mobileMenuLinks = mobileMenu.getElementsByTagName('a');
+            for (let link of mobileMenuLinks) {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            }
 
-            const deleteProduct = async (id) => {
-                if (!db) { return alert('Erro de conexão. Tente recarregar a página.'); }
-                try {
-                    await deleteDoc(doc(db, productsCollectionPath, id));
-                } catch (e) {
-                    console.error("Erro ao remover documento: ", e);
-                    alert("Ocorreu um erro ao remover o produto.");
+            secretTrigger.addEventListener('click', () => {
+                if (!adminMode) {
+                    showPasswordModal();
                 }
-            };
+            });
 
-            // --- 5. Lógica de Inicialização ---
-            const initializeApp = async () => {
-                // Ativar listeners de UI que não dependem do Firebase
-                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-                secretTrigger.addEventListener('click', showPasswordModal);
-                closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
-                loginBtn.addEventListener('click', checkPassword);
-                adminPasswordInput.addEventListener('keyup', e => e.key === 'Enter' && checkPassword());
-                passwordModal.addEventListener('click', (e) => { if (e.target === passwordModal) hidePasswordModal(); });
-                addProductBtn.addEventListener('click', addProduct);
-                categoryFilters.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'BUTTON') {
-                        document.querySelector('.category-btn.active')?.classList.remove('active');
-                        e.target.classList.add('active');
-                        renderProducts(e.target.dataset.category);
+            closeAdminPanelBtn.addEventListener('click', closeAdminPanel);
+            
+            loginBtn.addEventListener('click', checkPassword);
+            closeModalBtn.addEventListener('click', hidePasswordModal);
+            adminPasswordInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
+            passwordModal.addEventListener('click', (e) => {
+                if (e.target === passwordModal) hidePasswordModal();
+            });
+            
+            addProductBtn.addEventListener('click', addProduct);
+            
+            productGrid.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('delete-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    if (confirm('Tem certeza que deseja excluir este produto?')) {
+                        deleteProduct(parseInt(index, 10));
                     }
-                });
-                productGrid.addEventListener('click', (e) => {
-                    const deleteButton = e.target.closest('.delete-btn');
-                    if (deleteButton) {
-                        const id = deleteButton.dataset.id;
-                        if (confirm('Tem certeza que deseja excluir este produto?')) {
-                            deleteProduct(id);
-                        }
-                    }
-                });
-
-                // Tentar inicializar o Firebase
-                try {
-                    const firebaseConfig = {
-                        apiKey: "AIzaSyDuhM2qqaj68Ve8G_eMcEU-9dmZLFBzh4U",
-                        authDomain: "nacao-esportiva-7f224.firebaseapp.com",
-                        projectId: "nacao-esportiva-7f224",
-                        storageBucket: "nacao-esportiva-7f224.appspot.com",
-                        messagingSenderId: "55149738514",
-                        appId: "1:55149738514:web:d8abff9e41309242dd36cb",
-                        measurementId: "G-18PEDQ3W5H"
-                    };
-                    const appId = firebaseConfig.projectId;
-                    
-                    const app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    const auth = getAuth(app);
-                    
-                    await signInAnonymously(auth);
-                    
-                    productsCollectionPath = `/artifacts/${appId}/public/data/products`;
-                    productsCollection = collection(db, productsCollectionPath);
-
-                    const populateInitialProducts = async () => {
-                        const populationDone = localStorage.getItem('firestorePopulationDone');
-                        if (populationDone) return;
-                        const snapshot = await getDocs(productsCollection);
-                        if (snapshot.empty) {
-                            console.log("Populando o Firestore com produtos iniciais...");
-                            const batch = writeBatch(db);
-                            initialProducts.forEach(p => batch.set(doc(productsCollection), p));
-                            await batch.commit();
-                        }
-                        localStorage.setItem('firestorePopulationDone', 'true');
-                    };
-                    await populateInitialProducts();
-
-                    onSnapshot(productsCollection, (snapshot) => {
-                        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        renderProducts();
-                    }, (error) => {
-                        console.error("Erro no listener do Firestore:", error);
-                        throw new Error("Falha no listener do Firestore.");
-                    });
-                } catch (error) {
-                    console.error("ERRO: A inicialização do Firebase falhou. A usar produtos locais.", error);
-                    productsSubtitle.innerHTML += '<br><span class="text-orange-600 text-sm">Modo offline. Os produtos podem não estar atualizados.</span>';
-                    allProducts = initialProducts;
-                    renderProducts();
                 }
-            };
+            });
 
-            // --- 6. Iniciar a Aplicação ---
-            initializeApp();
+            categoryFilters.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelector('.category-btn.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    const category = e.target.dataset.category;
+                    renderProducts(category);
+                }
+            });
+
+            // Initial render based on the active button
+            const initialCategory = document.querySelector('.category-btn.active').dataset.category;
+            renderProducts(initialCategory);
         });
     </script>
 </body>
 </html>
-
 
 
